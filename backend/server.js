@@ -1,5 +1,4 @@
 import express from 'express'
-import serverless from 'serverless-http'
 import cors from 'cors'
 import 'dotenv/config'
 import connectDB from './config/mongoodb.js'
@@ -9,17 +8,18 @@ import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
 
-
-//App Config
+// App Config
 const app = express()
+const port = process.env.PORT || 4000  // <-- Add this line
+
 connectDB()
 connectCloudinary()
 
-//Middlewares
+// Middlewares
 app.use(express.json())
 app.use(cors())
 
-//API endpoints
+// API endpoints
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
@@ -29,8 +29,5 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
-// ⚠️ REMOVE app.listen()
-// app.listen(port, ()=> console.log('Server started on PORT: '+ port))
+app.listen(port, () => console.log('Server started on PORT: ' + port))
 
-// ✅ Instead export the serverless handler
-export const handler = serverless(app)
